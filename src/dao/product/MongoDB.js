@@ -11,6 +11,7 @@ export class ProductDAOMongoDB extends MongoDBContainer {
             thumbnail: { type: String, required: false },
             price: { type: Number, required: true },
             stock: { type: Number, required: true },
+            type: { type: String, required: true },
         })
     }
 }

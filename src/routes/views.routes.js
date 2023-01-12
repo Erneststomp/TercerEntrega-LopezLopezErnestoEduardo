@@ -1,12 +1,16 @@
 import { Router } from "express";
 import passport from "passport";
+import {productDAO} from '../dao/product/index.js'
+
+
 
 const router= Router();
 
 router.get('/', async(req,res)=>{
     if(req.session.user){
         let sesionUser=req.session.user
-        res.render('chat.handlebars',{userData:sesionUser})
+        let characters =  await productDAO.getAll()
+        res.render('chat.handlebars',{userData:sesionUser, characters:characters})
     }else{
         res.redirect('/login');
     }
@@ -51,14 +55,6 @@ router.get('/registerfail', async(req,res)=>{
     res.render('registerfail.handlebars')
 })
 
-router.get('/github', passport.authenticate('github',{scope:[]}), async(req,res)=>{
-    
-})
-
-router.get('/githubcallback', passport.authenticate('github'),async(req,res)=>{
-    req.session.user={names:req.user.names,id:req.user.id,avatar:req.user.avatar,alias:req.user.alias,lastnanme:req.user.lastname,password:req.user.password,age:req.user.age}
-    res.redirect('/');
-})
 
 
 

@@ -14,7 +14,10 @@ async getAll() {
 try {
     const querySnapshot = await this.query.get()
     const docs = querySnapshot.docs
-    return docs
+    let response=docs.map(doc=>({
+        resp:doc.data(),
+    }))
+    return response
 } catch (error) {
     throw new Error(`Error getting all items: ${error}`)
 }

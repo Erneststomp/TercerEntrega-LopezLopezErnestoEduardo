@@ -14,9 +14,7 @@ form.addEventListener('sumbit',evt=>{
     }).then(result=>result.json()).then(json=>console.log(json))
 })
 
-
 const changelogin= document.getElementById('login')
 changelogin.addEventListener('click',evt=>{ 
     window.location.href = "/login";
-
 }) 

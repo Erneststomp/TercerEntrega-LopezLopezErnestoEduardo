@@ -18,4 +18,4 @@ export default   {
         mainurl:'http://localhost:8080'
         //mainurl:'https://railway-lopezlopezernestoeduardo-production.up.railway.app'
     }
-}  
+}   

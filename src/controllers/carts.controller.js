@@ -6,7 +6,6 @@ export const cartsController = {
   getcartList: async (req, res) => {
     try {
       const allCarts = await cartDAO.getAll()
-      console.log(allCarts,proto)
       res.json(allCarts)
     } catch (error) {
       console.warn({class:`cartsController`,method:`getcartList: async (req, res)`,description: error})

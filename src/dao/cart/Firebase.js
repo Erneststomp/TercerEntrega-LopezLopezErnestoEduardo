@@ -5,4 +5,4 @@ export class CartDAOFirebase extends FirebaseContainer {
         super('carts')
     }
 }
-export default CartDAOFirebase
+export default CartDAOFirebase 

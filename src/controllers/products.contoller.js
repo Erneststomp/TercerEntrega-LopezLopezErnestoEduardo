@@ -7,7 +7,7 @@ export const productsController = {
     try {
       const pId = parseInt(req.params.pid);
       const productFound = await productDAO.getById(pId)
-      if (!productFound) {
+      if (!productFound) { 
         res.status(200).send({description: `Product not found.`})
       } else {
         res.status(200).json({description:`Product found`,data:productFound})
@@ -35,14 +35,22 @@ export const productsController = {
         const allProducts = await productDAO.getAll()
         
         const itemProduct = allProducts.find(item => item.code == req.body.code) 
-
+        
+      
         if(typeof (itemProduct) == 'undefined'){
-
+          console.log(allProducts.length)
+          // console.log(allProducts[allProducts.length - 1].resp.object)
           const getNewId = () => {
-            let lastID = 0
+            let lastID=0
             if (allProducts && allProducts.length) {
-                lastID = allProducts[allProducts.length - 1].id
+              allProducts.forEach(element => {
+                if(element.resp.object.id>lastID){
+                  lastID=element.resp.object.id
+                }
+              });
             }
+
+           
             return Number(lastID) + 1
           }
 
@@ -55,7 +63,7 @@ export const productsController = {
             thumbnail: req.body.thumbnail,
             price: req.body.price ? parseInt( req.body.price ) : 0,
             stock: req.body.stock ? parseInt( req.body.stock ) : 0,
-          }
+          } 
 
           await productDAO.addItem(newProduct)
           res.status(201).json({description:`new product successfully created`,data:newProduct})
