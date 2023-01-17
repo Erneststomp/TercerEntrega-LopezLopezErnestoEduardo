@@ -4,7 +4,7 @@ import handlebars from 'express-handlebars'
 import viewsRouter from './routes/views.routes.js'
 import { Server } from "socket.io";
 import fs from 'fs';
-import testProducts from "./public/aditionalScripts/faker.js";
+import testProducts from "./service/faker.js";
 import session, {Cookie} from "express-session";
 import MongoStore from "connect-mongo";
 import mongoose from "mongoose";
