@@ -206,46 +206,6 @@ export const cartsController = {
     }
   }
 
-  // cartProductList: async (req, res) => {
-  //   try {
-
-  //     const cartId = req.params.id
-  //     const cartFound = await cartDB.getById(cartId)
-
-  //     if (!cartFound) {
-  //       res.send({ error: 'Cart not found.' })
-  //     } else {
-  //       res.json(cartFound.productos)
-  //     }
-  //   } catch (error) {
-  //     console.log(`ERROR: ${error}`)
-  //   }
-  // },
-
-
-  // addProductToCartV0: async (req, res) => {
-  //   try {
-  //     const cartId = req.params.id
-  //     const prodId = req.params.id_prod
-
-  //     const cartFound = await cartDB.getById(cartId)
-  //     const productFound = await productDB.getById(prodId)
-
-  //     if (!cartFound) {
-  //       res.send({ error: 'Cart not found.' })
-  //     } else if (!productFound) {
-  //       res.send({ error: 'Product not found.' })
-  //     } else {
-  //       await cartDB.addItemInto(cartFound.id, productFound)
-  //       const updatedCart = await cartDB.getById(cartId)
-  //       res.json(updatedCart)
-  //     }
-  //   } catch (error) {
-  //     console.log(`ERROR: ${error}`)
-  //   }
-  // },
-
-
 }
 
 export default cartsController

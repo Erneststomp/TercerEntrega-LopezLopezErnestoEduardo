@@ -39,7 +39,6 @@ export const productsController = {
       
         if(typeof (itemProduct) == 'undefined'){
           console.log(allProducts.length)
-          // console.log(allProducts[allProducts.length - 1].resp.object)
           const getNewId = () => {
             let lastID=0
             if (allProducts && allProducts.length) {

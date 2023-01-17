@@ -1,7 +1,11 @@
 //----------* IMPORTS *----------//
 import admin from 'firebase-admin'
 import { FieldValue } from 'firebase-admin/firestore'
-
+import serviceAccount from '../api/options/firestore.json'assert{type:'json'}
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: 'https://backend-mocks.firebaseio.com'
+})
 
 const db = admin.firestore()
 
