@@ -22,25 +22,20 @@
         <div style="width: 90%;">
         <h1> Available Pokemons:</h1>
             <div style="display: block;  border: 1px solid red;  padding: 5px;  margin-top: 5px; width: 100%; height: 550px;overflow-y: scroll; border-style:double;">
-                {{#each characters}}
-                    <ol>    
+                
+                    <ol>    {{#each characters}}
                         <li id="numero" value="{{@index}}" style="list-style: none;">
                             <img src="{{this.resp.object.thumbnail}}" style="height: 100px;"></img>
                             <h2>  Name: {{this.resp.object.name}} Price: ${{this.resp.object.price}} pokedollars  Stock: {{this.resp.object.stock}}</h2>
                             <h3> Details: {{this.resp.object.description}}</h3>
                             <button id="addthispokemon">Add to Cart</button> <button id="viewthispokemon"> View </button>
-                        </li>
-                    </ol>
+                        </li>{{/each}}
+                    </ol> 
                     <br>
-                {{/each}}
             </div>
         </div>
-        
-        
     </div>
-    
 </div>
- 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/socket.io/socket.io.js"></script>    
     <script  src="../../chat.js" async 

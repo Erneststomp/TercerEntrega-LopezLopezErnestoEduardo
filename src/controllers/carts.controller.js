@@ -69,8 +69,9 @@ export const cartsController = {
       const getNewId = () => {
         let lastID = 0
         if (allCarts && allCarts.length) {
-          lastID = allCarts[allCarts.length - 1].id
+          lastID = allCarts[allCarts.length - 1].resp.object.id
         }
+        console.log(lastID)
         return Number(lastID) + 1
       }
 
@@ -91,11 +92,9 @@ export const cartsController = {
   addProductToCart: async (req, res) => {
     try {
       const cId = parseInt(req.params.cid)
-      console.log('CID')
-      console.log(cId)
+
       const pId = parseInt(req.body.pid)
-      console.log("PID")
-      console.log(pId)
+
       const pquantity =  req.body.quantity ? parseInt(req.body.quantity) : 1
 
       const cartFound = await cartDAO.getById(cId)
@@ -104,9 +103,7 @@ export const cartsController = {
       }
       
       const productFound = await productDAO.getById(pId)
-      console.log('productfound')
-      console.log(productFound)
-      
+
       if(!productFound){
         return res.status(422).json({ description: `Product ${pId} not found.` })
       }
@@ -122,24 +119,19 @@ export const cartsController = {
       
       const productsInCartsFound = cartFound.products
       const ProductItemInCarts = productsInCartsFound.find(item=> item.id === parseInt(pId))
-      console.log('product items in cart')
-      console.log(productsInCartsFound)
+
 
       if(!ProductItemInCarts){
-        console.log('entro')
+
         const newProduct = {
           id: pId,
           quantity: pquantity,
         }
-        console.log(newProduct)
-        console.log('paso esto primero')
-        console.log('cartfound')
-        console.log(cartFound)
+
         cartFound.products.push(newProduct)
-        console.log('cartfound')
-        console.log(cartFound)
+
         await cartDAO.editById(cartFound,cId)
-        console.log('paso esto')
+
         return res.status(200).json({description:`Product ${pId} added to cart ${cId} successfully.`,data:cartFound})
         
       }

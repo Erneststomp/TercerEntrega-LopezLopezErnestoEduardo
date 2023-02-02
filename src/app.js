@@ -16,7 +16,6 @@ import config from './config.js'
 import productsRouter from './routes/products.routes.js' 
 import cartsRouter from './routes/cart.routes.js'
 
-
 const app =express();
 
 const connection =mongoose.connect(config.mongo.urlmongo)
@@ -41,7 +40,6 @@ app.use(passport.session());
 initializePassport();
 app.use(passport.initialize());
 
-
 app.engine('handlebars',handlebars.engine());
 app.set('views',__dirname+'/views');
 app.set('view engine','handlebars');
@@ -51,7 +49,6 @@ app.use('/',viewsRouter);
 app.use('/api/randoms', randomRouter)
 app.use('/api/products',productsRouter)
 app.use('/api/carts',cartsRouter)
-
 
 app.use(express.static(__dirname+'/public'));
 

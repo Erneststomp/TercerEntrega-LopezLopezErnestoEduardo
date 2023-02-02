@@ -6,13 +6,15 @@
   "type": "module",
   "scripts": {
     "start": "nodemon src/app.js PROD",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha src/index.test.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "-": "^0.0.1",
     "bcrypt": "^5.1.0",
     "connect-mongo": "^4.6.0",
+    "D": "^1.0.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-flash": "^0.0.2",
@@ -23,6 +25,7 @@
     "handlebars": "^4.7.7",
     "knex": "^2.3.0",
     "minimist": "^1.2.7",
+    "mocha": "^10.2.0",
     "mongoose": "^6.7.3",
     "mysql": "^2.18.1",
     "normalizr": "^3.6.2",
@@ -35,6 +38,8 @@
     "yargs": "^17.6.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^7.6.0"
+    "@faker-js/faker": "^7.6.0",
+    "chai": "^4.3.7",
+    "supertest": "^6.3.3"
   }
 }

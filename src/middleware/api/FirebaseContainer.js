@@ -50,13 +50,9 @@ try {
 
 async editById(object, id) {
 try {
-    console.log('object')
-    console.log(object)
-    console.log('id')
-    console.log(id)
+
     const doc = this.query.doc(id.toString())
-    console.log('doc')
-    console.log(doc)
+
     await doc.update(object)
 } catch (error) {
     throw new Error(`Error editing item: ${error}`)

@@ -38,7 +38,7 @@ export const productsController = {
         
       
         if(typeof (itemProduct) == 'undefined'){
-          console.log(allProducts.length)
+
           const getNewId = () => {
             let lastID=0
             if (allProducts && allProducts.length) {
@@ -62,6 +62,7 @@ export const productsController = {
             thumbnail: req.body.thumbnail,
             price: req.body.price ? parseInt( req.body.price ) : 0,
             stock: req.body.stock ? parseInt( req.body.stock ) : 0,
+            type: req.body.type ? parseInt( req.body.type ) : 0,
           } 
 
           await productDAO.addItem(newProduct)
@@ -96,8 +97,8 @@ export const productsController = {
             thumbnail: req.body.thumbnail ? req.body.thumbnail : productFound.thumbnail,
             price: req.body.price ? parseInt( req.body.price ) : productFound.price,
             stock: req.body.stock ? parseInt( req.body.stock ) : productFound.stock,
+            type: req.body.type ? parseInt( req.body.type ) : productFound.type,
           }
-          console.log(editedProduct)
           await productDAO.editById(editedProduct,pId)
 
           res.status(200).json({description:`Product with id=${pId} updated`})

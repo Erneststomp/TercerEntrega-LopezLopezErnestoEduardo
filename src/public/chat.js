@@ -14,20 +14,17 @@ socket.on('cartredirect', destination=> {
 
 });
 
+let allpokemons=[]
 
 const viewpokemon = document.getElementById('viewthispokemon')
 const idpokemon=document.getElementById("numero").value
 viewpokemon.addEventListener('click',evt=>{
     socket.emit('thispokemonredirect',{id:idpokemon})
 })
-
+  
 socket.on('pokemonredirect', destination=> {
-    console.log(destination)
     window.location.href = destination;
 
 });
-
-
-
 
  

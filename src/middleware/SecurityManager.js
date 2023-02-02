@@ -16,7 +16,6 @@ export const logout = (req, res) => {
 export const adminAuth = async(req, res, next) => {
     const response = await fs.promises.readFile('./src/public/data/user.json','utf-8');
     isAdmin=response
-    console.log(isAdmin)
     if (isAdmin=='true') {
     next()
     } else {
