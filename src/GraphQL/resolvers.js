@@ -1,18 +1,22 @@
 import { productDAO } from "../dao/product/index.js"
 import userService from "../public/users.js"
-const resolverrs={
+const resolvers={
     Query:{
-        hello: () => "Si lo Ve, Funciona",
+        hola: () => "Si lo Ve, Funciona",
         getAllPokemons: async()=>{
-            let pokemons = await productDAO.getAll()
-            console.log(pokemons)
-            return pokemons
+            let result = await productDAO.getAll()
+            let newResult=[]
+            for(let i=0;i<result.length;i++){
+                
+                newResult.push(result[i].resp.object)
+            }
+            console.log(newResult)
+            return newResult
         }
     },
     Mutation:{
         addPokemon: async(_,args)=>{
             let result = await productDAO.addItem(args)
-            console.log(result)
             return result
             
         },
@@ -23,4 +27,4 @@ const resolverrs={
     }
 
 }
-export default resolverrs
+export default resolvers

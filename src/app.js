@@ -16,9 +16,8 @@ import config from './config.js'
 import productsRouter from './routes/products.routes.js' 
 import cartsRouter from './routes/cart.routes.js'
 import { ApolloServer } from "apollo-server-express";
-
- import typeDefs from "./GraphQL/typedDefs.js";
- import resolverrs from "./GraphQL/resolvers.js";
+import typeDefs from "./GraphQL/typedDefs.js";
+import resolvers from "./GraphQL/resolvers.js";
 
 const app =express();
 
@@ -56,11 +55,11 @@ app.use('/api/carts',cartsRouter)
 
 app.use(express.static(__dirname+'/public'));
 
-const apolloServer=new ApolloServer({
+const apolloServer = new ApolloServer({
     typeDefs,
-    resolverrs
+    resolvers
 })
-await apolloServer.start()
+await apolloServer.start();
 apolloServer.applyMiddleware({app})
 
 
