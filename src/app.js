@@ -15,6 +15,10 @@ import randomRouter from './routes/random.routes.js'
 import config from './config.js'
 import productsRouter from './routes/products.routes.js' 
 import cartsRouter from './routes/cart.routes.js'
+import { ApolloServer } from "apollo-server-express";
+
+ import typeDefs from "./GraphQL/typedDefs.js";
+ import resolverrs from "./GraphQL/resolvers.js";
 
 const app =express();
 
@@ -52,6 +56,15 @@ app.use('/api/carts',cartsRouter)
 
 app.use(express.static(__dirname+'/public'));
 
+const apolloServer=new ApolloServer({
+    typeDefs,
+    resolverrs
+})
+await apolloServer.start()
+apolloServer.applyMiddleware({app})
+
+
+
 io.on('connection', socket=>{
     socket.on('test',async()=>{
         const logtest = await testProducts.getTest();
@@ -69,4 +82,8 @@ io.on('connection', socket=>{
         io.emit('pokemonredirect', destination);
     })
 
-})
+}
+
+
+
+)
