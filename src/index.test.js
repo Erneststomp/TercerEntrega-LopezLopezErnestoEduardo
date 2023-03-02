@@ -18,7 +18,7 @@ describe('cart',()=>{
             const response=await requester.get('/api/carts/')
             const {_body}=response;
             if (_body.length!=0){
-                expect(_body[_body.length-1].resp.object.products).to.be.an('array') 
+                expect(_body[_body.length-1].products).to.be.an('array') 
             }
         })
 

@@ -7,10 +7,8 @@ const resolvers={
             let result = await productDAO.getAll()
             let newResult=[]
             for(let i=0;i<result.length;i++){
-                
-                newResult.push(result[i].resp.object)
+                newResult.push(result[i])
             }
-            console.log(newResult)
             return newResult
         }
     },

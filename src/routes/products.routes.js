@@ -2,7 +2,6 @@ import {Router} from 'express'
 const router = new Router()
 import {productsController} from '../controllers/products.contoller.js'
 
-
 // Delete Product List
 router.delete('/', productsController.deleteProductList)
 

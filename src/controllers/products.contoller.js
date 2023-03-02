@@ -28,28 +28,24 @@ export const productsController = {
     }
   },
 
-
   addNewProduct: async (req, res) => {
-
       try {
         const allProducts = await productDAO.getAll()
         
         const itemProduct = allProducts.find(item => item.code == req.body.code) 
         
-      
+      console.log(req.body)
         if(typeof (itemProduct) == 'undefined'){
 
           const getNewId = () => {
             let lastID=0
             if (allProducts && allProducts.length) {
               allProducts.forEach(element => {
-                if(element.resp.object.id>lastID){
-                  lastID=element.resp.object.id
+                if(element.id>lastID){
+                  lastID=element.id
                 }
               });
             }
-
-           
             return Number(lastID) + 1
           }
 
@@ -62,7 +58,7 @@ export const productsController = {
             thumbnail: req.body.thumbnail,
             price: req.body.price ? parseInt( req.body.price ) : 0,
             stock: req.body.stock ? parseInt( req.body.stock ) : 0,
-            type: req.body.type ? parseInt( req.body.type ) : 0,
+            type: req.body.type ? req.body.type : 0,
           } 
 
           await productDAO.addItem(newProduct)

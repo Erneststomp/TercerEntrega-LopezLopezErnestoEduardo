@@ -1,9 +1,12 @@
 import passport from "passport";
 import local from 'passport-local';
-import userService from "../users.js";
+import userService from "../../public/users.js";
 import { createHash } from "../../utils.js";
 import { validatePassword } from "../../utils.js";
+
+
 const localStrategy=local.Strategy;
+
 const initializePassport=()=>{
     
     passport.use('register',new localStrategy({passReqToCallback:true,usernameField:'id'},
@@ -33,7 +36,6 @@ const initializePassport=()=>{
             const user =await userService.findOne({id:id})
             if(!user) return done(null, false,{message:"There is no user with this email, please verify or register"})
             if(!validatePassword(user,password)) return done(null,false,{message:'Incorrect Password'})
-           
             return done(null,user)
         }
         catch(error){
@@ -41,7 +43,7 @@ const initializePassport=()=>{
             console.log(error)
         }
     }))
-  
+
     passport.serializeUser((user,done)=>{
         done(null,user._id)
     })

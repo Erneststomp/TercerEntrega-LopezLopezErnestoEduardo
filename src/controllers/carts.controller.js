@@ -69,7 +69,7 @@ export const cartsController = {
       const getNewId = () => {
         let lastID = 0
         if (allCarts && allCarts.length) {
-          lastID = allCarts[allCarts.length - 1].resp.object.id
+          lastID = allCarts[allCarts.length - 1].id
         }
         console.log(lastID)
         return Number(lastID) + 1

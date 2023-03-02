@@ -37,7 +37,3 @@ socket.on('log',data=>{
     
 })
 
-const changehome = document.getElementById('home')
-changehome.addEventListener('click', evt => {
-    window.location.href = "/";
-})  

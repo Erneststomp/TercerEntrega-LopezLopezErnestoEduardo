@@ -11,7 +11,6 @@ const userSchema=new mongoose.Schema({
     adress:String,
     alias:String,
     password:String
-    
 })
 
 const userService=mongoose.model(collection,userSchema);
