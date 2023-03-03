@@ -3,8 +3,7 @@ const socket=io(
 );
 var userDataLabel = document.getElementById('namelabel'); // selecciona el elemento label
 var userData = userDataLabel.getAttribute('value');
-console.log(userData)
-console.log(typeof userData)
+
     userName=userData
     socket.connect();
     socket.emit('messagereq')

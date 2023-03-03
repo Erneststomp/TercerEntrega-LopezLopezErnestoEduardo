@@ -6,7 +6,6 @@ import MailingService from "../service/mailing.js";
 import userService from "../public/users.js";
 import { createHash } from "../utils.js";
 
-
 const router= Router();
 router.post('/', async(req,res)=>{
     res.redirect('/logout');
@@ -18,45 +17,30 @@ router.post('/logout', async(req,res)=>{
         res.render('logout.handlebars',{userData:sesionUser})
         req.session.destroy()
     }else{
-        res.redirect('/login');
+      res.send({status:'error',message:"There is no active session to close"})
     }    
 })
-
-router.post('/login', passport.authenticate('login', {
-    failureRedirect: '/loginfail',
-    failureFlash: true 
-  }), async(req, res) => {
-    req.session.user = {
-      id: req.user.id,
-      names: req.user.names,
-      lastname: req.user.lastnames,
-      age: req.user.age,
-      avatar: req.user.avatar,
-      alias: req.user.alias
-    }
-    res.redirect('/');
-  });
-
-router.post('/register', passport.authenticate('register', {
-    failureRedirect: '/registerfail',
-    failureFlash: true 
-  }), async(req, res) => {
-    console.log('entro al envio del correo')
-    const {id}=req.body;
-    const mailer = new MailingService();
-    let result=await mailer.sendSimpleMAil({
-      from: process.env.EMAIL_ADDRESS,
-      to: id,
-      subject:'Regsitration',
-      html:`<div>
-      <h1>The user has been registered </h1>
-      <p>${id}</p>
-      
-      </div>`
-    })
-    res.send({status:'success',message:"The user has been registered"})
-  });
-
+    
+router.post('/login',passport.authenticate('login',{failureRedirect:'/loginfail',failureFlash: true}) ,async(req,res)=>{
+  req.session.user={
+      id:req.user.id,names:req.user.names, lastname:req.user.lastnames,age:req.user.age,avatar:req.user.avatar,alias:req.user.alias
+  }
+  res.redirect('/');
+})
+router.post('/register', passport.authenticate('register',{failureRedirect:'/registerfail'}), async(req,res)=>{
+  const {id}=req.body;
+  const mailer = new MailingService();
+  let result=await mailer.sendSimpleMAil({
+    from: process.env.EMAIL_ADDRESS,
+    to: id,
+    subject:'Register confirmation',
+    html:`<div>
+    <h1>The user has been registered </h1>
+    <p>${id}</p>
+    </div>`
+  })
+  res.redirect('/registersucced')
+})
 
 router.post('/recover', async(req,res)=>{
   const {email}=req.body;
@@ -79,7 +63,6 @@ router.post('/recover', async(req,res)=>{
 })
 
 router.put('/restore', async(req, res) => {
-  console.log(req.body)
   try{
     let{newPassword,token}=req.body
     let {email}=jwt.verify(token,'Nosequeponer01');

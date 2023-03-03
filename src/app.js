@@ -84,7 +84,7 @@ io.on('connection', socket=>{
     socket.on('messagereq',async()=>{
         let log =  await chatDAO.getAll()
         io.emit('log',log)
-    })
+    }) 
 
     socket.on('message',async(data)=>{
         const response = await chatDAO.getAll()

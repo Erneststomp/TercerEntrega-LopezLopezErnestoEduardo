@@ -18,7 +18,6 @@ router.get('/', async(req,res)=>{
           }
       })
       res.render('home.handlebars',{userData:sesionUser, characters:characterData})
-      console.log('se supopone que hizo el render')
   }else{
       res.redirect('/login');
   }
@@ -48,9 +47,7 @@ router.get('/login', async(req,res)=>{
 
 
 router.get('/loginfail', async(req, res) => {
-  const errorMessage = req.flash('error')[0]; // get the first flash message
-  console.log('llega a loginfail')
-  console.log(errorMessage)
+  const errorMessage = req.flash('error')[0]; 
   res.send({status:"error",error:errorMessage})
   // res.render('loginfail.handlebars', { errorMessage });
 });
@@ -64,9 +61,7 @@ router.get('/register', async(req,res)=>{
 })
 
 router.get('/registerfail', async(req, res) => {
-  const errorMessage = req.flash('error')[0]; // get the first flash message
-  console.log('llega a registerfail')
-  console.log(errorMessage)
+  const errorMessage = req.flash('error')[0];
   // res.render('registerfail.handlebars', { errorMessage });
   res.send({status:"error",error:errorMessage})
 });
@@ -123,5 +118,8 @@ router.get('/chat', async(req,res)=>{
   )
 })
 
+router.get('/registersucced', async(req, res,) => {
+  res.render('registersucced.handlebars')
+})
 
 export default router;   

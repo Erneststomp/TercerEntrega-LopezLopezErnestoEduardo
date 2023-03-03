@@ -11,7 +11,6 @@ ToCart.addEventListener('click',evt=>{
 })
 
 socket.on('cartredirect', destination=> {
-    console.log(destination)
     window.location.href = destination;
 
 });

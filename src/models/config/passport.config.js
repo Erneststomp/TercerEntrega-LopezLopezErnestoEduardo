@@ -12,14 +12,15 @@ const initializePassport=()=>{
     passport.use('register',new localStrategy({passReqToCallback:true,usernameField:'id'},
     async(req,id,password,done)=>{
         try{
-            const {names,lastname,age,avatar,alias,phone,adress}=req.body
-            if(!names||!id||!lastname||!age||!avatar||!alias||!phone||!adress)return done(null,false,{message:"All fields are needed"})
+            const {names,lastname,age,avatar,alias,phone,adress,CountryCode}=req.body
+            let Phone= CountryCode+phone;
+            if(!names||!id||!lastname||!age||!avatar||!alias||!Phone||!adress)return done(null,false,{message:"All fields are needed"})
             const exist =await userService.findOne({id:id})
             if(exist) return done(null,false,{message:"User already exist"})
             const newUSer={
-                id,names,lastname,age,avatar,alias,phone,adress,
+                id,names,lastname,age,avatar,alias,Phone,adress,
                 password:createHash(password)
-            }
+            } 
             let user=newUSer
             let result=await userService.create(user)
             return done(null,result)
@@ -27,7 +28,7 @@ const initializePassport=()=>{
         catch(error){
             done(error)
         }
-    }))
+    })) 
 
     passport.use('login',new localStrategy({usernameField:'id'},
     async(id,password,done)=>{
@@ -40,7 +41,6 @@ const initializePassport=()=>{
         }
         catch(error){
             done(error)
-            console.log(error)
         }
     }))
 
