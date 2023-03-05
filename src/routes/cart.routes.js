@@ -11,17 +11,18 @@ router.get('/', cartsController.getcartList)
 
 // })
 // Get Cart by ID
-router.get('/:id', cartsController.getCartById)
+router.get('/:cid', cartsController.getCartById)
 
 // Get Cart Product List
 router.get('/:cid/products', cartsController.getAllProductListByCartId)
 // Create New Cart
 router.post('/', cartsController.addNewCart)
 // Add Product to Cart
-router.post('/:cid/products', cartsController.addProductToCart)          
+router.put('/:cid/products', cartsController.addProductToCart)          
 // Delete Product from Cart
 router.delete('/:cid/products/:pid', cartsController.deleteProductToCartById)
 // Delete Card by ID
 router.delete('/:cid', cartsController.deleteCartById)
 
-export default router; 
+
+export default router;   

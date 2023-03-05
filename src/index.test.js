@@ -1,8 +1,6 @@
-import Todos from "./Todos.js"
-import Assert from 'assert'
 import Supertest from "supertest"; 
 import Chai from "chai";
-import config from './config.js'
+import config from "./models/config/config.js";
 
 const expect = Chai.expect;
 const requester=Supertest(config.url.mainurl)

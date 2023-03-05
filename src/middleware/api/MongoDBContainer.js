@@ -72,6 +72,32 @@ export class MongoDBContainer {
         throw new Error(error);
     }
     }
+    deletePersonalById = async (id) => {
+        try {
+            const itemFound = await this.collection.find({id: id })
+    
+            if (itemFound && itemFound.length) {
+            await this.collection.deleteOne({
+                id: id,
+            })
+            return true
+            } else {
+                return false
+            }
+        } catch (error) {
+            console.warn({class:`class MongoDBContainer`, method:`deleteById= async(idNumber)`,description:error})
+            throw new Error(error);
+        }
+        }
+        getPersonalById = async (id) => {
+            try {
+                const itemFound = await this.collection.findOne({ id: id })
+                return itemFound
+            } catch (error) {
+                console.warn({class:`class MongoDBContainer`, method:`getById= async(id)`,description:error})
+                throw new Error(error);
+            }
+        }
 
     deleteAll = async () => {
     try {
@@ -81,6 +107,8 @@ export class MongoDBContainer {
         throw new Error(error);
     }
     }
+
+    
 }
 
 //----------* EXPORTS CLASS *----------//

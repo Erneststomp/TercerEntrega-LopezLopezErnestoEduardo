@@ -64,8 +64,12 @@ router.get('/registerfail', async(req, res) => {
   const errorMessage = req.flash('error')[0];
   // res.render('registerfail.handlebars', { errorMessage });
   res.send({status:"error",error:errorMessage})
+  
 });
-
+router.get('/recoverfail', async(req,res)=>{
+  const errorMessage = req.flash('error')[0];
+  res.send({status:"error",error:errorMessage})
+})
 const infodelProceso = {
     // [-] Argumentos de entrada  
     args: process.argv.slice(2),
@@ -89,17 +93,19 @@ router.get('/info', async(req, res,) => {
     res.render('info', {data})
 })
 
-router.get('/recover', async(req, res,) => {
-  res.render('recover.handlebars')
-})
+// router.get('/recover', async(req, res,) => {
+//   res.render('recover.handlebars')
+// })
 
 router.get('/restore', async(req, res,) => {
   res.render('recoverPassword.handlebars')
 })
 
-router.get('/restoreFail', async(req, res,) => {
-  res.render('restoreFail.handlebars')
-})
+// router.get('/restoreFail', async(req, res,) => {
+//  ///res.render('restoreFail.handlebars')
+//  const errorMessage = req.flash('error')[0];
+//  res.send({status:"error",error:errorMessage})
+// })
 
 router.get('/chat', async(req,res)=>{
   if(req.session.user){

@@ -14,8 +14,6 @@ router.get('/:pid?', async (req,res)=>{
         }
 })
 
-// router.get('/', productsController.getAllProductList)
-
 // Add New Product  
 router.post('/',productsController.addNewProduct)
 // Edit Product by ID

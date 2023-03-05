@@ -11,7 +11,7 @@ import initializePassport from "./models/config/passport.config.js";
 import passport from "passport";
 import flash from "express-flash";
 import randomRouter from './routes/random.routes.js'
-import config from './config.js'
+import config from "./models/config/config.js";
 import productsRouter from './routes/products.routes.js' 
 import sessionRouter from './routes/session.routes.js' 
 import cartsRouter from './routes/cart.routes.js'
@@ -19,6 +19,7 @@ import { ApolloServer } from "apollo-server-express";
 import typeDefs from "./GraphQL/typedDefs.js";
 import resolvers from "./GraphQL/resolvers.js";
 import { chatDAO } from "./dao/chat/index.js";
+import cartspersonalRouter from "./routes/personalcart.routes.js";
 
 const app =express();
 
@@ -37,7 +38,7 @@ app.use(session({
     secret: "nosequeponer000",
     resave:true,
     saveUninitialized:true,
-}));
+})); 
 
 app.use(flash());
 app.use(passport.session());
@@ -54,6 +55,7 @@ app.use('/',sessionRouter)
 app.use('/api/randoms', randomRouter)
 app.use('/api/products',productsRouter)
 app.use('/api/carts',cartsRouter)
+app.use('/carts',cartspersonalRouter)
 
 app.use(express.static(__dirname+'/public'));
 

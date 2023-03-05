@@ -97,7 +97,7 @@ export const productsController = {
           }
           await productDAO.editById(editedProduct,pId)
 
-          res.status(200).json({description:`Product with id=${pId} updated`})
+          res.status(200).json({description:`Product with id=${pId} updated`,editedProduct})
         }
       } catch (error) {
         console.warn({class:`productsController`,method:`updatetProduct: async (req, res)`,description:error})

@@ -1,11 +1,11 @@
-let cartDAO
+let personalCartDAO
 
 
 switch ('mongodb') {    
     case 'mongodb':
-        const { default: CartDAOMongoDB } = await import('./MongoDB.js')
-        cartDAO = new CartDAOMongoDB()
+        const { default: PCartDAOMongoDB } = await import('./MongoDB.js')
+        personalCartDAO = new PCartDAOMongoDB()
         break
 }
 
-export { cartDAO }
+export { personalCartDAO }
