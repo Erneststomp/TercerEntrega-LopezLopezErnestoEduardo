@@ -2,10 +2,12 @@ import {Router} from 'express'
 const router = new Router()
 import {productsController} from '../controllers/products.contoller.js'
 
-// Delete Product List
+
+// Delete Product List, elimina todos los productos registrados
+
 router.delete('/', productsController.deleteProductList)
 
-// Get Product List & Get Product by ID
+// Get Product List & Get Product by ID, en caso de proprocionarse un ID numerico para acceder a un producto, lo regresa, si no se entrega un id, enviara todos los productos y si se entrega un id no numerico se enviara un mensaje de error
 router.get('/:pid?', async (req,res)=>{
         if(req.params.pid != undefined) {
             productsController.getProductById(req,res)
@@ -14,12 +16,14 @@ router.get('/:pid?', async (req,res)=>{
         }
 })
 
-// Add New Product  
+// Agrega un nuevo producto
 router.post('/',productsController.addNewProduct)
-// Edit Product by ID
+// Modifica los datos de el producto especificado (id numerico)
 router.put('/:pid' ,productsController.updatetProductById)
-// Delete Product by ID
+// Delete Product by ID, id numerico
 router.delete('/:pid',productsController.deleteProductById)
+//Filter products by type
+router.get('/type/:type', async (req,res)=>{productsController.getProductByType(req,res)})
 
 
 export default router; 

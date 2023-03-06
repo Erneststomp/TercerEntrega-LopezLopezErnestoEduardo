@@ -6,11 +6,28 @@ export const productsController = {
   getProductById: async (req, res) => {
     try {
       const pId = parseInt(req.params.pid);
+      if(isNaN(pId) ){
+        return res.send({description:'Invalid product ID, it must be numerical'})
+      }
       const productFound = await productDAO.getById(pId)
       if (!productFound) { 
         res.status(200).send({description: `Product not found.`})
       } else {
         res.status(200).json({description:`Product found`,data:productFound})
+      }
+    } catch (error) {
+      console.warn({class:`productsController`,method:`getProductById: async (req, res)`,description: error})
+      res.status(500).json({description: `Internal Server Error,please contact administrator `})
+    }
+  },
+  getProductByType: async (req, res) => {
+    try {
+      const pId = req.params.type;
+      const productsFound = await productDAO.getByType(pId)
+      if (!productsFound) { 
+        res.status(200).send({description: `Product not found.`})
+      } else {
+        res.status(200).json({description:`Product found`,data:productsFound})
       }
     } catch (error) {
       console.warn({class:`productsController`,method:`getProductById: async (req, res)`,description: error})
@@ -79,6 +96,9 @@ export const productsController = {
 
       try {
         const pId = parseInt(req.params.pid)
+        if(isNaN(pId) ){
+          return res.send({description:'Invalid product ID, it must be numerical'})
+        }
         const productFound = await productDAO.getById(pId)
         if (!productFound || productFound ==[]) {
           res.status(422).json({ description: 'Product not found.' })
@@ -105,10 +125,42 @@ export const productsController = {
       }
   },
 
+  updateSoldProductById: async (productId, soldStock, req, res) => {
+    try {
+      const pId = productId
+      if (isNaN(pId)) {
+        return res.send({description: 'Invalid product ID, it must be numerical'})
+      }
+      const productFound = await productDAO.getById(pId)
+      if (!productFound || productFound == []) {
+        res.status(422).json({description: 'Product not found.'})
+      } else {
+        const editedProduct = {
+          id: pId,
+          timestamp: Date.now(),
+          name: req.body.name ? req.body.name : productFound.name,
+          description: req.body.description ? req.body.description : productFound.description,
+          code: req.body.code ? req.body.code : productFound.code,
+          thumbnail: req.body.thumbnail ? req.body.thumbnail : productFound.thumbnail,
+          price: req.body.price ? parseInt(req.body.price) : productFound.price,
+          stock: req.body.stock ? parseInt(req.body.stock) - soldStock : productFound.stock - soldStock,
+          type: req.body.type ? parseInt(req.body.type) : productFound.type,
+        }
+        await productDAO.editById(editedProduct, pId)
+      }
+    } catch (error) {
+      console.warn({class: `productsController`, method: `updatetProduct: async (req, res)`, description: error})
+      res.status(500).json({description: `Internal Server Error,please contact administrator`})
+    }
+  },
+
   deleteProductById: async (req, res) => {
 
       try {
         const pId = parseInt(req.params.pid)
+        if(isNaN(pId) ){
+          return res.send({description:'Invalid product ID, it must be numerical'})
+        }
         const productFound = await productDAO.getById(pId)
         
         if (!productFound) {

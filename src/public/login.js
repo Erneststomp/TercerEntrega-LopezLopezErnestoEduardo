@@ -14,8 +14,8 @@ form.addEventListener('sumbit',evt=>{
     }).then(result=>result.json()).then(json=>console.log(json))
 })
 
-const changeregister= document.getElementById('singup')
-changeregister.addEventListener('click',evt=>{ 
-    window.location.href = "/register";
-}) 
+// const changeregister= document.getElementById('singup')
+// changeregister.addEventListener('click',evt=>{ 
+//     window.location.href = "/register";
+// }) 
 

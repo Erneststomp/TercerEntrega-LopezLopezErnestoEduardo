@@ -16,6 +16,9 @@ export const cartsController = {
   getCartById: async (req, res) => {
     try {
       const cartId = parseInt(req.params.cid)
+      if(isNaN(cartId) ){
+        return res.send({description:'Invalid Cart ID, it must be numerical'})
+      }
       const cartFound = await cartDAO.getById(cartId)
 
       if (!cartFound) {
@@ -31,33 +34,40 @@ export const cartsController = {
   getAllProductListByCartId: async (req, res) => {
     try {
       const cartId = parseInt(req.params.cid)
+      if(isNaN(cartId)){
+        return res.send({description:'Invalid Cart ID, it must be numerical'})
+      }
+      
       let cartFound = await cartDAO.getById(cartId)
       const productFound  = await productDAO.getAll()
-
       if (!cartFound) {
         return res.status(422).json({ description: 'Cart not found.' })
       } else if (!cartFound.products ) {
         return res.status(200).json({description:`Cart found, content 0 products.`,data:[]})
       }
       else {
-        cartFound.products = cartFound.products.map( item => {
-          let productItem = productFound.find( product => product.id === item.id )
+        let productTotalPayment = 0;
+        let totalProductQuantity = 0; 
+        cartFound.products = cartFound.products.map((item) => {
+          let productItem = productFound.find((product) => product.id === item.id);
           const editproductItem = {
-            id:  productItem.id,
-            timestamp:productItem.timestamp,
+            id: productItem.id,
+            timestamp: productItem.timestamp,
             name: productItem.name ? productItem.name : 'No name',
             description: productItem.description ? productItem.description : 'No description',
             code: productItem.code ? productItem.code : 'No code',
             thumbnail: productItem.thumbnail ? productItem.thumbnail : 'no Image',
-            price: productItem.price ? parseInt( productItem.price ) : 0,
-            stock: productItem.stock ? parseInt( productItem.stock ) : 0
-          }
-
-          return productItem ? {...editproductItem, quantity: item.quantity} : item
-
-    })
-        return res.status(200).json({description:`Cart found, content ${cartFound.products.length} products.`,data:cartFound.products})
-      }
+            price: productItem.price ? parseInt(productItem.price) : 0,
+            stock: productItem.stock ? parseInt(productItem.stock) : 0,
+          };
+  
+          productTotalPayment = parseInt(productItem.price) * parseInt(item.quantity);
+          totalProductQuantity += item.quantity;
+          return productItem ? { ...editproductItem, quantity: item.quantity, productTotalPayment: productTotalPayment } : item;
+        });
+        const totalProductPayment = cartFound.products.reduce((total, item) => total + (item.productTotalPayment || 0), 0);
+        return { data: cartFound.products, totalPayment: totalProductPayment, totalQuantity: totalProductQuantity };
+     }
     } catch (error) {
         console.warn({class:`cartsController`,method:`getAllProductListToByCartId: async (req, res)`,description: error})
         res.status(500).json({description: `Internal Server Error,please contact administrator `})
@@ -72,7 +82,6 @@ export const cartsController = {
         if (allCarts && allCarts.length) {
           lastID = allCarts[allCarts.length - 1].id
         }
-        console.log(lastID)
         return Number(lastID) + 1
       }
 
@@ -99,6 +108,10 @@ export const cartsController = {
 
       const pquantity =  req.body.quantity ? parseInt(req.body.quantity) : 1
 
+      if(isNaN(pId) || isNaN(pquantity)||isNaN(cId)){
+        return res.send({description:'Invalid parameters, they all must be numerical'})
+      }
+
       const cartFound = await cartDAO.getById(cId)
       if(!cartFound){
         return res.status(422).json({ description: `Cart ${cId} not found.` })
@@ -121,19 +134,17 @@ export const cartsController = {
       
       const productsInCartsFound = cartFound.products
       const ProductItemInCarts = productsInCartsFound.find(item=> item.id === parseInt(pId))
-      if(productsInCartsFound){
-        if(productFound.stock < pquantity+cartFound.products[0].quantity){
-          return res.status(422).json({ description: 'insufficient stock.' })
-        } 
-      }
 
       if(!ProductItemInCarts){
-
         const newProduct = {
           id: pId,
           quantity: pquantity,
         }
-
+        if(ProductItemInCarts){
+          if(productFound.stock < pquantity+cartFound.products[0].quantity){
+            return res.status(422).json({ description: 'insufficient stock.' })
+          } 
+        }
         cartFound.products.push(newProduct)
 
         await cartDAO.editById(cartFound,cId)
@@ -165,6 +176,9 @@ export const cartsController = {
     try {
       const cId = parseInt( req.params.cid )
       const pId = parseInt( req.params.pid )
+      if(isNaN(pId) || isNaN(cId)){
+        return res.send({description:'Invalid parameters, they must be numerical'})
+      }
 
       const cartFound = await cartDAO.getById(cId)
       if(!cartFound){
@@ -192,6 +206,9 @@ export const cartsController = {
     try {
       const cartId = parseInt(req.params.cid)
       const cartFound = await cartDAO.getById(cartId)
+      if(isNaN(cartId)){
+        return res.send({description:'Invalid Cart ID, it must be numerical'})
+      }
       if (!cartFound) {
         res.status(422).json({ description: 'Cart not found.' })
       } else {
@@ -219,7 +236,6 @@ export const cartsController = {
   },
   deletePersonalCartById: async (id) => {
     try {
-      console.log(id)
       let result=await personalCartDAO.deletePersonalById(id)
     } catch (error) {
       console.warn({class:`cartsController`,method:`deleteCartById: async (req, res)`,description: error})
@@ -229,7 +245,6 @@ export const cartsController = {
   getPersonalCartById: async (req, res) => {
     try {
       const cartId = req.params.cid
-      console.log(cartId)
       const cartFound = await personalCartDAO.getPersonalById(cartId)
       if (!cartFound) {
         res.send({ description: `Cart not found. There is not user registered as: ${cartId} `})
@@ -243,10 +258,12 @@ export const cartsController = {
   addProductToPersonalCart: async (req, res) => {
     try {
       const cId = req.params.cid
-
       const pId = parseInt(req.body.pid)
       const pquantity =  req.body.quantity ? parseInt(req.body.quantity) : 1
 
+      if(isNaN(pId) || isNaN(pquantity)){
+        return res.send({description:'Invalid parameters, they must be numerical'})
+      }
       const cartFound = await personalCartDAO.getPersonalById(cId)
       if(!cartFound){
         return res.status(422).json({ description: `Cart ${cId} not found.` })
@@ -267,15 +284,16 @@ export const cartsController = {
       } 
       const productsInCartsFound = cartFound.products
       const ProductItemInCarts = productsInCartsFound.find(item=> item.id === parseInt(pId))
-      if(productsInCartsFound){
-        if(productFound.stock < pquantity+cartFound.products[0].quantity){
-          return res.status(422).json({ description: 'insufficient stock.' })
-        } 
-      }
+     
       if(!ProductItemInCarts){
         const newProduct = {
           id: pId,
           quantity: pquantity,
+        }
+        if(ProductItemInCarts){
+          if(productFound.stock < pquantity+cartFound.products[0].quantity){
+            return res.status(422).json({ description: 'insufficient stock.' })
+          } 
         }
 
         cartFound.products.push(newProduct)
@@ -309,7 +327,9 @@ export const cartsController = {
     try {
       const cId = req.params.cid 
       const pId = parseInt( req.params.pid )
-
+      if(isNaN(pId)){
+        return res.send({description:'Invalid Product ID, it must be numerical'})
+      }
       const cartFound = await personalCartDAO.getPersonalById(cId)
 
       if(!cartFound){
@@ -334,39 +354,43 @@ export const cartsController = {
   }, 
   getAllProductListByPersonalCartId: async (req, res) => {
     try {
-      const cartId = req.params.cid
-      let cartFound = await personalCartDAO.getPersonalById(cartId)
-      const productFound  = await productDAO.getAll()
-
+      const cartId = req.params.cid;
+      let cartFound = await personalCartDAO.getPersonalById(cartId);
+      const productFound = await productDAO.getAll();
+  
       if (!cartFound) {
-        return res.status(422).json({ description: 'Cart not found.' })
-      } else if (!cartFound.products ) {
-        return res.status(200).json({description:`Cart found, content 0 products.`,data:[]})
-      }
-      else {
-        cartFound.products = cartFound.products.map( item => {
-          let productItem = productFound.find( product => product.id === item.id )
+        return res.status(422).json({ description: 'Cart not found.' });
+      } else if (!cartFound.products) {
+        return res.status(200).json({ description: `Cart found, content 0 products.`, data: [] });
+      } else {
+        let productTotalPayment = 0;
+        let totalProductQuantity = 0; 
+        cartFound.products = cartFound.products.map((item) => {
+          let productItem = productFound.find((product) => product.id === item.id);
           const editproductItem = {
-            id:  productItem.id,
-            timestamp:productItem.timestamp,
+            id: productItem.id,
+            timestamp: productItem.timestamp,
             name: productItem.name ? productItem.name : 'No name',
             description: productItem.description ? productItem.description : 'No description',
             code: productItem.code ? productItem.code : 'No code',
             thumbnail: productItem.thumbnail ? productItem.thumbnail : 'no Image',
-            price: productItem.price ? parseInt( productItem.price ) : 0,
-            stock: productItem.stock ? parseInt( productItem.stock ) : 0
-          }
-
-          return productItem ? {...editproductItem, quantity: item.quantity} : item
-
-    })
-        return res.status(200).json({description:`Cart found, content ${cartFound.products.length} products.`,data:cartFound.products})
+            price: productItem.price ? parseInt(productItem.price) : 0,
+            stock: productItem.stock ? parseInt(productItem.stock) : 0,
+          };
+  
+          productTotalPayment = parseInt(productItem.price) * parseInt(item.quantity);
+          totalProductQuantity += item.quantity;
+          return productItem ? { ...editproductItem, quantity: item.quantity, productTotalPayment: productTotalPayment } : item;
+        });
+        const totalProductPayment = cartFound.products.reduce((total, item) => total + (item.productTotalPayment || 0), 0);
+        return { data: cartFound.products, totalPayment: totalProductPayment, totalQuantity: totalProductQuantity };
       }
     } catch (error) {
-        console.warn({class:`cartsController`,method:`getAllProductListToByCartId: async (req, res)`,description: error})
-        res.status(500).json({description: `Internal Server Error,please contact administrator `})
+      console.warn({ class: `cartsController`, method: `getAllProductListToByCartId: async (req, res)`, description: error });
+      res.status(500).json({ description: `Internal Server Error,please contact administrator ` });
     }
   },
+  
 
 
 }

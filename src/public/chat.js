@@ -1,9 +1,11 @@
+//configuracion de socket, para el chat
+
 const socket=io(
     {autoConnect:false}
 );
-var userDataLabel = document.getElementById('namelabel'); // selecciona el elemento label
+var userDataLabel = document.getElementById('namelabel'); 
 var userData = userDataLabel.getAttribute('value');
-
+//se  usa como userdata el valor enviado desde el inicio de sesion, para identificar quien esta en la sesion
     userName=userData
     socket.connect();
     socket.emit('messagereq')
@@ -36,7 +38,3 @@ socket.on('log',data=>{
     
 })
 
-const changehome = document.getElementById('home')
-changehome.addEventListener('click', evt => {
-    window.location.href = "/";
-})  
